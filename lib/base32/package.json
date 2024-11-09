@@ -1,13 +1,10 @@
 {
-  "name": "thirty-two",
+  "name": "base32",
   "description": "Implementation RFC 3548 Base32 encoding/decoding for node.",
-  "version": "1.0.2",
-  "engines": {
-    "node": ">=0.2.6"
-  },
+  "version": "1.0.2-zepp",
   "author": "Chris Umbel <chris@chrisumbel.com>",
   "keywords": ["base32", "encoding"],
-  "main": "./lib/thirty-two/index.js",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/chrisumbel/thirty-two.git"
