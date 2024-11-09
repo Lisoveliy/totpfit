@@ -13,7 +13,6 @@ Page({
         })
     },
     build() {
-        console.log("Page tip opened")
         const {width, height} = getDeviceInfo()
         createWidget(widget.TEXT, {
             x: 0,
