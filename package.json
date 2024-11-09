@@ -1,0 +1,17 @@
+{
+  "name": "totpfit",
+  "version": "1.0.0",
+  "description": "TOTP Authenticator for Amazfit devices",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@zeppos/device-types": "^3.0.0"
+  },
+  "dependencies": {
+    "jssha": "^3.3.1"
+  }
+}
