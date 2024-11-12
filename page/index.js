@@ -33,8 +33,9 @@ Page({
       const buttonHeight = height / 4;
       const margin = 10;
       let totpHeight = margin;
-
+    
       for(let i = 0; i < buffer.length; i++){
+        console.log(buffer[i])
         createWidget(widget.FILL_RECT, {
           x: width / 2 - buttonWidth / 2,
           y: totpHeight,
@@ -53,7 +54,7 @@ Page({
           align_h: align.CENTER_H,
           align_v: align.CENTER_V,
           text_style: text_style.NONE,
-          text: buffer[i].name
+          text: (buffer[i].expireTime - Date.now()) / 1000
         })
         createWidget(widget.TEXT, {
           x: 0,
@@ -65,7 +66,7 @@ Page({
           align_h: align.CENTER_H,
           align_v: align.CENTER_V,
           text_style: text_style.NONE,
-          text: buffer[i].data
+          text: buffer[i].otp
         })
 
         totpHeight += margin + buttonHeight;
