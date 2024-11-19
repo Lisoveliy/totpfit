@@ -2,6 +2,7 @@ import { getDeviceInfo } from '@zos/device'
 import { TOTP } from '../lib/totp-quickjs'
 import { setStatusBarVisible, createWidget, widget, align, prop, text_style, event, deleteWidget } from '@zos/ui'
 import { RenderAddButton, RenderExpireBar, RenderOTPValue, RenderTOTPContainer } from './render/totpRenderer'
+import { initLoop } from './render/index/renderer'
 
 const app = getApp()
 const { width, height } = getDeviceInfo()
@@ -18,15 +19,10 @@ Page({
 	},
 	build() {
 		const buffer = app._options.globalData.TOTPS
-		if (buffer.length < 1) {
+		if (buffer.length < 1)
 			RenderAddButton('page/tip')
-		} else {
-			renderContainers(buffer)
-			renderTOTPs(buffer)
-			setInterval(() => {
-				renderWidgets.forEach(x => deleteWidget(x))
-				renderTOTPs(buffer)
-			}, 500)
+		else{
+			initLoop(buffer)
 		}
 	}
 })
