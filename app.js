@@ -4,18 +4,14 @@ import { LocalStorage } from "@zos/storage"
 const localStorage = new LocalStorage()
 App({
   globalData: {
-    TOTPS: localStorage.getItem('TOTPs') || []
+    TOTPS: localStorage.getItem('TOTPs') || [
+      new TOTP('JBSWY3DPEHPK3PXPQ', 'totp.danhersam.com', 'I', 6, 30, 0, 'SHA-1')
+    ]
   },
   onCreate(options) {
      localStorage.setItem('TOTPs', [
-       new TOTP('JBSWY3DPEHPK3PXP', 'GitHub', 'Lisoveliy'),
-       new TOTP('JBSWY3DPEHPK3PXP', 'GitHub', 'Lisoveliy'),
-       new TOTP('JBSWY3DPEHPK3PXP', 'GitHub', 'Lisoveliy'),
-       new TOTP('JBSWY3DPEHPK3PXP', 'GitHub', 'Lisoveliy'),
-       new TOTP('JBSWY3DPEHPK3PXP', 'GitHub', 'Lisoveliy'),
-       new TOTP('JBSWY3DPEHPK3PXPAF', 'my.contabo.com', 'Contabo-Customer-Control-Panel-11755808'),
-       new TOTP('JBSWY3DPEHPK3PXP', 'GitHub', 'Lisoveliy'),
-       new TOTP('JBSWY3DPEHPK3PXPAF', 'my.contabo.com', 'Contabo-Customer-Control-Panel-11755808')])
+      
+    ])
    },
 
   onDestroy(options) {
