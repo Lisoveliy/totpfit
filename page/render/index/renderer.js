@@ -1,4 +1,4 @@
-import { deleteWidget } from "@zos/ui";
+import { deleteWidget, prop } from "@zos/ui";
 import { TOTP } from "../../../lib/totp-quickjs";
 import { RenderAddButton, RenderExpireBar, RenderOTPValue, RenderTOTPContainer } from '../totpRenderer'
 
@@ -20,19 +20,27 @@ const renderData = []
 
 function renderTOTPs(buffer) {
     for (let i = 0; i < buffer.length; i++) {
-        let otpData = TOTP.copy(buffer[i]).getOTP(Date.now())
+        let otpData = TOTP.copy(buffer[i]).getOTP()
         console.log(otpData.otp)
-        renderData[i] = {}
-        renderData[i].OTP = RenderOTPValue(i, otpData.otp),
-        renderData[i].expireBar = RenderExpireBar(i, otpData.createdTime, buffer[i].fetchTime)
+        renderData[i] = {
+            OTP: RenderOTPValue(i, otpData.otp),
+            expireBar: RenderExpireBar(i, otpData.createdTime, buffer[i].fetchTime)
+        }
         setInterval(() => {
-            deleteWidget(renderData[i].expireBar)
-            renderData[i].expireBar = RenderExpireBar(i, otpData.createdTime, buffer[i].fetchTime)
-            if(otpData.expireTime < Date.now()){
-                otpData = TOTP.copy(buffer[i]).getOTP(Date.now())
-                deleteWidget(renderData[i].OTP)
-                renderData[i].OTP = RenderOTPValue(i, otpData.otp)
+            const expireDif = Math.abs((((Date.now() - otpData.createdTime) / 1000)
+                / buffer[i].fetchTime) - 1)
+
+            renderData[i].expireBar.setProperty(prop.MORE, {
+                end_angle: (expireDif * 360) - 90,
+                color: expireDif > 0.25 ? 0x1ca9c9 : 0xfa0404,
+            })
+            
+            if (otpData.expireTime < Date.now()) {
+                otpData = TOTP.copy(buffer[i]).getOTP()
+                renderData[i].OTP.setProperty(prop.MORE, {
+                    text: otpData.otp
+                })
             }
-        }, 500)
+        }, 50)
     }
 }

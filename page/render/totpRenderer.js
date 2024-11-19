@@ -76,14 +76,13 @@ export function RenderExpireBar(position, createdTime, fetchTime) {
     const yPos = getYPos(position)
     const expireDif = Math.abs((((Date.now() - createdTime) / 1000)
         / fetchTime) - 1)
-
     return createWidget(widget.ARC, {
         x: buttonWidth - 50,
         y: yPos + 52,
         w: 40,
         h: 40,
         line_width: 5,
-        color: 0x1ca9c9,
+        color: expireDif > 0.25 ? 0x1ca9c9 : 0xfa0404,
         start_angle: -90,
         end_angle: (expireDif * 360) - 90,
         text: expireDif
