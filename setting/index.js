@@ -32,6 +32,6 @@ AppSettingsPage({
         }, 'TOTPS:'))
       ,
       ...totpButtons])
-      return sec;
+    return sec;
   }
 })
