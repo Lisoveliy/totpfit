@@ -1,5 +1,8 @@
+let _props = null;
+
 AppSettingsPage({
   build(props) {
+    _props = props;
     const storage = props.settingsStorage.getItem("TOTPs");
     const totpEntrys = GetTOTPList(storage);
 
@@ -42,14 +45,18 @@ function GetTOTPList(storage){
   let totpEntrys = [];
   let counter = 0;
   storage.forEach((element) => {
+    const elementId = counter;
     const textInput = TextInput({
       placeholder: "otplink",
       label: "Change OTP link",
       labelStyle: {
         backgroundColor: "#14213D",
         textAlign: "center",
-        width: "70vw",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
         margin: "10px",
+        flexGrow: 1,
         fontSize: "20px",
         color: "#E5E5E5",
         borderRadius: "5px"
@@ -69,11 +76,12 @@ function GetTOTPList(storage){
     const delButton = Button(
       {
         onClick: (el) => {
-          storage = storage.filter(x => storage.indexOf(x) != counter - 1)
+          storage = storage.filter(x => storage.indexOf(x) != elementId)
+          updateStorage(storage)
         },
         style: {
           backgroundColor: "#ba181b",
-          fontSize: "20px",
+          fontSize: "18px",
           color: "#ffffff",
           height: "fit-content",
           margin: "10px"
@@ -101,7 +109,8 @@ function GetTOTPList(storage){
         },
       },
       [textBig, text, View({style: {
-        display: "flex"
+        display: "grid",
+        gridTemplateColumns: "1fr 100px"
       }}, [textInput, delButton])]
     );
     totpEntrys.push({ text: text, view: view });
@@ -109,4 +118,8 @@ function GetTOTPList(storage){
   });
 
   return totpEntrys.map(x => x.view);
+}
+
+function updateStorage(storage){
+  _props.settingsStorage.setItem('TOTPs', storage)
 }
