@@ -1,13 +1,16 @@
+import { BaseSideService } from "@zeppos/zml/base-side"
+
 AppSideService(
+  BaseSideService(
     {
       onInit(){
-        settings.settingsStorage.addListener('change', async ({ key, newValue, oldValue }) => {
-             console.log(key)
-             console.log(newValue)
-             const totps = settings.settingsStorage.getItem('TOTPs')
-             const dataBuffer = Buffer.from(totps)
-             messaging.peerSocket.send(dataBuffer.buffer)
-        })
+
+      },
+      onRequest(req, res){
+        if(req.method === 'totps'){
+          res(null, settings.settingsStorage.getItem('TOTPs'))
+        }
       }
     }
   )
+)

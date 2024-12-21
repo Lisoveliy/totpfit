@@ -12,6 +12,7 @@ const containerRadius = 20 //Corner radius of container
 
 const textColor = 0xa0a0a0 //Color of TOTP description text
 const textSize = 24 //Size of TOTP description text
+const statusBarPading = 65
 
 /** Function for render box container for TOTP values
  * 
@@ -112,4 +113,4 @@ export function RenderAddButton(pagePath) {
     })
 }
 
-function getYPos(position) { return position * (buttonHeight + 10) }
+function getYPos(position) { return position * (buttonHeight + 10) + statusBarPading }

@@ -1,6 +1,6 @@
-import { deleteWidget, prop } from "@zos/ui";
+import { prop } from "@zos/ui";
 import { TOTP } from "../../../lib/totp-quickjs";
-import { RenderAddButton, RenderExpireBar, RenderOTPValue, RenderTOTPContainer } from '../totpRenderer'
+import { RenderExpireBar, RenderOTPValue, RenderTOTPContainer } from '../totpRenderer'
 
 /**
  * 
