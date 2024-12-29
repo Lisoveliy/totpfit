@@ -72,8 +72,13 @@ function GetTOTPList(storage){
       placeholder: "otpauth://",
       label: "Change OTP link",
       onChange: (changes) => {
+        try{
         storage[elementId] = getTOTPByLink(changes)
         updateStorage(storage)
+        }
+        catch(err){
+          console.log(err)
+        }
       },
       labelStyle: {
         backgroundColor: "#14213D",
