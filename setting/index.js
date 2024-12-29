@@ -5,7 +5,7 @@ let _props = null;
 AppSettingsPage({
   build(props) {
     _props = props;
-    const storage = props.settingsStorage.getItem("TOTPs")
+    const storage = props.settingsStorage.getItem("TOTPs") ?? []
     const totpEntrys = GetTOTPList(storage)
     const createButton = TextInput({
       placeholder: "otpauth://",

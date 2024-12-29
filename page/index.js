@@ -11,8 +11,8 @@ Page(
 		onInit() {
 			this.getTOTPData().then((x) => {
 				console.log(x)
-				localStorage.setItem('TOTPs', x)
-				app._options.globalData.TOTPS = x
+				localStorage.setItem('TOTPs', x ?? [])
+				app._options.globalData.TOTPS = x ?? []
 				this.initPage();
 			})
 			.catch(() => {
