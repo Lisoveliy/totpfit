@@ -15,8 +15,8 @@ Page(
 				app._options.globalData.TOTPS = x
 				this.initPage();
 			})
-			.catch((x) => {
-			 	app._options.globalData.TOTPS = localStorage.getItem('TOTPs')
+			.catch(() => {
+			 	app._options.globalData.TOTPS = localStorage.getItem('TOTPs') ?? []
 				this.initPage()
 			 })
 		},
