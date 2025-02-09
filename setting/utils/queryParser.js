@@ -33,7 +33,7 @@ export function getTOTPByLink(link) {
       getHashType(algorithm)
     );
   } catch (err) {
-    throw new Error("Link is not valid");
+    return null;
   }
 }
 

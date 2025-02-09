@@ -5,13 +5,19 @@ let _props = null;
 AppSettingsPage({
   build(props) {
     _props = props;
+
     const storage = props.settingsStorage.getItem("TOTPs") ?? []
     const totpEntrys = GetTOTPList(storage)
     const createButton = TextInput({
       placeholder: "otpauth://",
       label: "Add new OTP Link",
       onChange: (changes) => {
-        storage.push(getTOTPByLink(changes))
+        var link = getTOTPByLink(changes)
+        if(link == null){
+          console.log("link is invalid")
+          return;
+        }
+        storage.push(link)
         updateStorage(storage)
       },
       labelStyle: {
