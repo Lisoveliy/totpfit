@@ -8,8 +8,12 @@ AppSideService(
       },
       onRequest(req, res){
         if(req.method === 'totps'){
+          console.log(set)
           res(null, settings.settingsStorage.getItem('TOTPs'))
         }
+      },
+      onSettingsChange(set){
+        console.log(set)
       }
     }
   )

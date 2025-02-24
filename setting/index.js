@@ -158,5 +158,7 @@ function GetTOTPList(storage){
 }
 
 function updateStorage(storage){
+  console.log("new storage is:")
+  console.log(storage)
   _props.settingsStorage.setItem('TOTPs', storage)
 }
