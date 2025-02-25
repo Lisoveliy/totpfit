@@ -20,12 +20,12 @@ export function getTOTPByLink(link) {
 
 		if (secret === undefined) throw new Error("Secret not defined");
 
-		issuer = issuer.replace("%20", " ");
-		client = client.replace("%20", " ");
-
         if(issuer == client){
             issuer = args[3].split("issuer=")[1]?.split("&")[0]
         }
+
+		issuer = issuer.replace("%20", " ");
+		client = client.replace("%20", " ");
 
 		return new TOTP(
 			secret,
