@@ -24,8 +24,8 @@ export function getTOTPByLink(link) {
             issuer = args[3].split("issuer=")[1]?.split("&")[0]
         }
 
-		issuer = issuer.replace("%20", " ");
-		client = client.replace("%20", " ");
+		issuer = decodeURIComponent(issuer);
+		client = decodeURIComponent(client);
 
 		return new TOTP(
 			secret,
@@ -37,6 +37,7 @@ export function getTOTPByLink(link) {
 			getHashType(algorithm)
 		);
 	} catch (err) {
+        console.log(err)
 		return null;
 	}
 }
