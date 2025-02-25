@@ -7,6 +7,7 @@ import { createWidget, widget, align, text_style } from "@zos/ui";
 const { width, height } = getDeviceInfo();
 const buttonWidth = width - width / 20; //Width of container
 const buttonHeight = height / 4; //Height of container
+
 const containerColor = 0x303030; //Color of container
 const containerRadius = 20; //Corner radius of container
 
