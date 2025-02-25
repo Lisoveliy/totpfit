@@ -23,6 +23,10 @@ export function getTOTPByLink(link) {
 		issuer = issuer.replace("%20", " ");
 		client = client.replace("%20", " ");
 
+        if(issuer == client){
+            issuer = args[3].split("issuer=")[1]?.split("&")[0]
+        }
+
 		return new TOTP(
 			secret,
 			issuer,
