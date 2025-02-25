@@ -20,8 +20,8 @@ function renderContainers(buffer) {
         RenderTOTPContainer(i, buffer[i].issuer, buffer[i].client);
     }
 }
-const renderData = [];
 
+const renderData = [];
 function renderTOTPs(buffer) {
     for (let i = 0; i < buffer.length; i++) {
         let otpData = TOTP.copy(buffer[i]).getOTP();

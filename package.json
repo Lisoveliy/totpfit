@@ -1,12 +1,9 @@
 {
   "name": "totpfit",
-  "version": "1.0.0",
-  "description": "TOTP Authenticator for Amazfit devices",
+  "version": "1.1.0",
+  "description": "Another 2FAuthenticator based on TOTP for Zepp Amazfit GTS 4",
   "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
+  "author": "Lisoveliy",
   "license": "MIT",
   "devDependencies": {
     "@zeppos/device-types": "^3.0.0"
