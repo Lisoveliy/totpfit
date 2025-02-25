@@ -6,7 +6,8 @@ AppSettingsPage({
   build(props) {
     _props = props;
 
-    const storage = props.settingsStorage.getItem("TOTPs") ?? []
+    console.log(props.settingsStorage.getItem("TOTPs"))
+    const storage = JSON.parse(props.settingsStorage.getItem("TOTPs") ?? "[]")
     const totpEntrys = GetTOTPList(storage)
     const createButton = TextInput({
       placeholder: "otpauth://",
@@ -160,5 +161,5 @@ function GetTOTPList(storage){
 function updateStorage(storage){
   console.log("new storage is:")
   console.log(storage)
-  _props.settingsStorage.setItem('TOTPs', storage)
+  _props.settingsStorage.setItem('TOTPs', JSON.stringify(storage))
 }
