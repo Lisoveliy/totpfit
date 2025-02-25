@@ -6,11 +6,12 @@ AppSideService(
       onInit(){
 
       },
-      onRequest(req, res){
-        if(req.method === 'totps'){
-          res(null, settings.settingsStorage.getItem('TOTPs'))
+      onRequest(request, response){
+        if(request.method === 'totps'){
+          response(null, settings.settingsStorage.getItem('TOTPs'))
         }
-      }
+      },
+      onSettingsChange(){ }
     }
   )
 )
