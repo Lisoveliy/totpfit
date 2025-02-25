@@ -8,7 +8,7 @@ AppSideService(
       },
       onRequest(req, res){
         if(req.method === 'totps'){
-          console.log(set)
+          console.log(req)
           res(null, settings.settingsStorage.getItem('TOTPs'))
         }
       },

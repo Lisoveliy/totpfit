@@ -1,9 +1,7 @@
 import { RenderAddButton } from './render/totpRenderer'
 import { initLoop } from './render/index/renderer'
 import { BasePage } from '@zeppos/zml/base-page'
-import { LocalStorage } from "@zos/storage"
 
-const localStorage = new LocalStorage()
 const app = getApp()
 let waitForFetch = true;
 Page(
@@ -11,12 +9,11 @@ Page(
 		onInit() {
 			this.getTOTPData().then((x) => {
 				console.log(x)
-				localStorage.setItem('TOTPs', x ?? [])
 				app._options.globalData.TOTPS = x ?? []
-				this.initPage();
+				this.initPage()
 			})
 			.catch(() => {
-			 	app._options.globalData.TOTPS = localStorage.getItem('TOTPs') ?? []
+			 	app._options.globalData.TOTPS = []
 				this.initPage()
 			 })
 		},

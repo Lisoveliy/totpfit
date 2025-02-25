@@ -13,8 +13,7 @@
     "description": "TOTP Authenticator for Amazfit devices"
   },
   "permissions": [
-    "data:os.device.info",
-    "device:os.local_storage"
+    "data:os.device.info"
   ],
   "runtime": {
     "apiVersion": {
