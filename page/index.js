@@ -8,12 +8,10 @@ Page(
 	BasePage({
 		onInit() {
 			this.getTOTPData().then((x) => {
-				console.log(x)
 				app._options.globalData.TOTPS = JSON.parse(x) ?? []
 				this.initPage()
 			})
 			.catch((x) => {
-				console.log(x)
 			 	app._options.globalData.TOTPS = []
 				this.initPage()
 			 })

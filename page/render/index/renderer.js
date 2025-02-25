@@ -21,7 +21,6 @@ const renderData = []
 function renderTOTPs(buffer) {
     for (let i = 0; i < buffer.length; i++) {
         let otpData = TOTP.copy(buffer[i]).getOTP()
-        console.log(otpData.otp)
         renderData[i] = {
             OTP: RenderOTPValue(i, otpData.otp),
             expireBar: RenderExpireBar(i, otpData.createdTime, buffer[i].fetchTime)
