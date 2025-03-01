@@ -64,6 +64,9 @@ function getByOtpauthScheme(link){
 function getByGoogleMigrationScheme(link){
     console.log("Hello")
     let data = link.split("data=")[1]; //Returns secret
-    let decodedProto = decodeProto(base64decode(data));
-    console.log(decodedProto)
+    data = decodeURIComponent(data);
+    console.log(data)
+    let decode = base64decode(data);
+    console.log(decode)
+    console.log(decodeProto(decode));
 }
