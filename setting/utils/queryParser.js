@@ -1,6 +1,6 @@
-import { decodeProto } from "../../lib/protobuf-decoder/protobufDecoder";
+import { decodeProto, TYPES } from "../../lib/protobuf-decoder/protobufDecoder";
 import { TOTP } from "../../lib/totp-quickjs";
-import { base64decode } from "../../lib/totp-quickjs/base32decoder";
+import { base64decode, encode } from "../../lib/totp-quickjs/base32decoder";
 
 const otpauthScheme = "otpauth:/";
 const googleMigrationScheme = "otpauth-migration:/";
@@ -40,7 +40,7 @@ function getByOtpauthScheme(link){
 		if (secret === undefined) throw new Error("Secret not defined");
 
         if(issuer == client){
-            issuer = args[3].split("issuer=")[1]?.split("&")[0]
+            issuer = args[3].split("issuer=")[1]?.split("&")[0];
         }
 
 		issuer = decodeURIComponent(issuer);
@@ -65,9 +65,49 @@ function getByGoogleMigrationScheme(link){
 
     let data = link.split("data=")[1]; //Returns base64 encoded data
     data = decodeURIComponent(data);
-    console.log(data)
     let decode = base64decode(data);
-    console.log(decode)
     let proto = decodeProto(decode);
-    console.log(proto);
+
+    let protoTotps = [];
+
+    proto.parts.forEach(part => {
+        if(part.type == TYPES.LENDELIM){
+            protoTotps.push(decodeProto(part.value));
+        }
+    });
+
+    let totps = [];
+    protoTotps.forEach(x => {
+        let type = x.parts.filter(x => x.index == 6)[0]; //find type of OTP
+        if(type.value !== '2'){
+            console.log("ERR: it's a not TOTP record")
+            return;
+        }
+        let secret = x.parts.filter(x => x.index == 1)[0].value;
+        secret = encode(secret);
+
+        let name = bytesToString(x.parts.filter(x => x.index == 2)[0].value);
+        let issuer = bytesToString(x.parts.filter(x => x.index == 3)[0].value);
+        
+        totps.push(new TOTP(
+			secret,
+			issuer,
+			name,
+			6,
+			30,
+			0,
+            "SHA-1"
+		));
+    });
+
+    return totps;
+    
+}
+
+function bytesToString(bytes) {
+    let str = '';
+    for (let i = 0; i < bytes.length; i++) {
+        str += String.fromCharCode(bytes[i]);
+    }
+    return str;
 }

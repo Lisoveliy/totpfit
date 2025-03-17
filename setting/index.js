@@ -13,12 +13,16 @@ AppSettingsPage({
             placeholder: "otpauth://",
             label: "Add new OTP Link",
             onChange: (changes) => {
-                var link = getTOTPByLink(changes);
+                let link = getTOTPByLink(changes);
                 if (link == null) {
                     console.log("link is invalid");
                     return;
                 }
-                storage.push(link);
+
+                if(Array.isArray(link))
+                    storage.push(...link);
+                else storage.push(link);
+
                 updateStorage(storage);
             },
             labelStyle: {
@@ -80,7 +84,11 @@ function GetTOTPList(storage) {
             label: "Change OTP link",
             onChange: (changes) => {
                 try {
-                    storage[elementId] = getTOTPByLink(changes);
+                    let link = getTOTPByLink(changes);
+                    if(Array.isArray(link))
+                        return;
+                    
+                    storage[elementId] = link;
                     updateStorage(storage);
                 } catch (err) {
                     console.log(err);

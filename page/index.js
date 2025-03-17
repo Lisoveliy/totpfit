@@ -6,7 +6,6 @@ import { LocalStorage } from "@zos/storage";
 const app = getApp();
 
 let waitForFetch = true;
-let localStorage = new LocalStorage();
 
 Page(
     BasePage({
@@ -14,6 +13,8 @@ Page(
             this.getTOTPData()
                 .then((x) => {
                     app._options.globalData.TOTPS = JSON.parse(x) ?? [];
+                    
+                    let localStorage = new LocalStorage();
                     localStorage.setItem(
                         "TOTPs",
                         JSON.stringify(app._options.globalData.TOTPS)
@@ -22,6 +23,7 @@ Page(
                 })
                 .catch((x) => {
                     console.log(`Init failed: ${x}`);
+                    let localStorage = new LocalStorage();
                     app._options.globalData.TOTPS = JSON.parse(
                         localStorage.getItem("TOTPs", null) ?? []
                     );
