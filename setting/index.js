@@ -5,7 +5,6 @@ let _props = null;
 AppSettingsPage({
     build(props) {
         _props = props;
-
         const storage = JSON.parse(
             props.settingsStorage.getItem("TOTPs") ?? "[]"
         );
