@@ -1,6 +1,6 @@
 {
   "name": "totpfit",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Another 2FAuthenticator based on TOTP for Zepp Amazfit GTS 4",
   "main": "app.js",
   "author": "Lisoveliy",
