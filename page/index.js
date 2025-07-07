@@ -23,10 +23,15 @@ Page(
                 })
                 .catch((x) => {
                     console.log(`Init failed: ${x}`);
-                    let localStorage = new LocalStorage();
-                    app._options.globalData.TOTPS = JSON.parse(
-                        localStorage.getItem("TOTPs", null) ?? []
-                    );
+                    try{
+                        let localStorage = new LocalStorage();
+                        app._options.globalData.TOTPS = JSON.parse(
+                        localStorage.getItem("TOTPs", [])
+                        );
+                    }
+                    catch{
+                        app._options.globalData.TOTPS = [];
+                    }
                     this.initPage();
                 });
         },

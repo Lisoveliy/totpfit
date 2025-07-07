@@ -33,6 +33,7 @@ function getByOtpauthScheme(link){
 		let period = args[3].split("period=")[1]?.split("&")[0]; //Returns period
 		let digits = args[3].split("digits=")[1]?.split("&")[0]; //Returns digits
 		let algorithm = args[3].split("algorithm=")[1]?.split("&")[0]; //Returns algorithm
+		let offset = args[3].split("offset=")[1]?.split("&")[0] ?? 0; //Returns offset
 
 		if (type.toLowerCase() != "totp")
 			throw new Error("Type is not valid, requires 'TOTP'");
@@ -52,7 +53,7 @@ function getByOtpauthScheme(link){
 			client,
 			digits,
 			period,
-			0,
+			Number(offset),
 			getHashType(algorithm)
 		);
 	} catch (err) {
