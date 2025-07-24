@@ -20,7 +20,7 @@ You can edit your otpauth:// records using button "Change TOTP link". Your previ
 
 To add 2FA TOTP recods using migration from Google Authenticator app, you must go to menu, select "Transfer accounts" -> "Export accounts" 
 
-Select codes then screenshot QR code and and scan (decode) it to a URI. Use any app providing scan from image, ex: "Search screen" function (Google Lens) on Google Assistant.
+Select codes then screenshot QR code and scan (decode) it to a URI. Use any app providing scan from image, ex: "Search screen" function (Google Lens) on Google Assistant.
 
 For example, this QR-Code will represent next URI string:
 
