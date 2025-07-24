@@ -4,7 +4,7 @@
 ![alt text](docs/assets/image2.png)
 
 ### Features:
-- Supports of otpauth links with parameters "issuer", "algorithm", "digits", "period"
+- Supports of otpauth links with parameters "client", "issuer", "algorithm", "digits", "period", "offset"
 - Addition/Edition/Deletion of TOTPs from mobile app
 - Support of google migration links formated: ```otpauth-migration://offline?data=...``` (At this stage with only 6 digits and only 30 seconds period)
 
