@@ -14,7 +14,7 @@ Then press OK, record will appear on page
 
 ![Added record](image-4.png)
 
-You can edit your otpauth:// records using button "Change TOTP link". Your previous record will be replaced with a new otpauth:// link entered on text field, and previous link will not be shown on field.
+You can edit your otpauth:// records using button "Change TOTP link". Your previous record will be replaced with a new otpauth:// link from text field, and previous link will not be shown on field.
 
 ### If you use google migrations (otpauth-migration:// links)
 
@@ -30,8 +30,8 @@ After scaning copy this URI string and paste it to app using button *"Add new TO
 
 ![Add new TOTP record using otpauth-migration](image-6.png)
 
-Then press OK, all selected records on Google Authenticator will appear on page
+Then press OK, all selected records from Google Authenticator will appear on page
 
 ![Added records from otpauth-migration](image-7.png)
 
-You can edit your records using button "Change TOTP link". Your previous record will be replaced with a new otpauth:// link entered on text field (otpauth-migration:// will not work), and previous link will not be shown on field.
+You can edit your records using button "Change TOTP link". Your previous record will be replaced with a new otpauth:// link from text field (otpauth-migration:// will not work), and previous link will not be shown on field.
