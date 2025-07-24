@@ -1,17 +1,15 @@
 # TOTPFIT 
-### Another 2FAuthenticator based on TOTP for Zepp Amazfit GTS 4
+### Another 2FAuthenticator based on TOTP for Zepp Amazfit GTS 4 with Google Authenticator migration Support
 
 ![alt text](docs/assets/image2.png)
 
 ### Features:
 - Supports of otpauth links with parameters "issuer", "algorithm", "digits", "period"
-- Addition/Edition/Deletion of TOTPs from mobile settings app
+- Addition/Edition/Deletion of TOTPs from mobile app
+- Support of google migration links formated: ```otpauth-migration://offline?data=...```
 
-### Google Migration Support:
-- Support of google migration links formated: ```otpauth-migration://offline?data=...``` (BETA)
+### Guides:
 
-### Screenshots:
+[How to add 2FA TOTP records (keys) on app](/docs/guides/how-to-add-totps/README.md)
 
-![alt text](docs/assets/image2.png)
-
-![alt text](docs/assets/image.png)
+#### This repo has mirror for issues on [GitHub](https://github.com/Lisoveliy/totpfit)
