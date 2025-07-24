@@ -34,4 +34,4 @@ Then press OK, all selected records on Google Authenticator will appear on page
 
 ![Added records from otpauth-migration](image-7.png)
 
-You can edit your records using button "Change TOTP link". Your previous record will be replaced with a new otpauth:// link entered on text field, and previous link will not be shown on field.
+You can edit your records using button "Change TOTP link". Your previous record will be replaced with a new otpauth:// link entered on text field (otpauth-migration:// will not work), and previous link will not be shown on field.
