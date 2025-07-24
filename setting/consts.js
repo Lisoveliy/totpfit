@@ -20,7 +20,7 @@ export const content = {
     },
     changeButton: {
         label: "Change TOTP link",
-        placeHolder: this.createButton.placeHolder
+        placeHolder: "otpauth(-migration)://"
     },
     deleteButton: {
         label: "Delete"
