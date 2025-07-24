@@ -33,7 +33,7 @@ AppSettingsPage({
             onChange: (changes) => {
                 let link = getTOTPByLink(changes);
                 if (link == null) {
-                    console.log("link is invalid");
+                    console.log("ERR: link is invalid");
                     return;
                 }
 
@@ -144,7 +144,7 @@ function GetTOTPList(storage) {
                     storage[elementId] = link;
                     updateStorage(storage);
                 } catch (err) {
-                    console.log(err);
+                    console.log(`ERR: ${err}`);
                 }
             },
             labelStyle: {

@@ -22,7 +22,7 @@ Page(
                     this.initPage();
                 })
                 .catch((x) => {
-                    console.log(`Init failed: ${x}`);
+                    console.log(`ERR: Init failed - ${x}`);
                     try {
                         let localStorage = new LocalStorage();
                         app._options.globalData.TOTPS = JSON.parse(

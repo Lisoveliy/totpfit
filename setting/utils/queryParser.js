@@ -56,7 +56,7 @@ function getByOtpauthScheme(link) {
             getHashType(algorithm),
         );
     } catch (err) {
-        console.log(err);
+        console.log(`ERR: ${err}`);
         return null;
     }
 }
