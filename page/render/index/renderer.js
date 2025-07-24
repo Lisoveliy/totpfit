@@ -30,7 +30,7 @@ function renderTOTPs(buffer) {
             expireBar: RenderExpireBar(
                 i,
                 otpData.createdTime,
-                buffer[i].fetchTime
+                buffer[i].fetchTime,
             ),
         };
         setInterval(() => {
@@ -38,7 +38,7 @@ function renderTOTPs(buffer) {
                 (Date.now() - otpData.createdTime) /
                     1000 /
                     buffer[i].fetchTime -
-                    1
+                    1,
             );
 
             renderData[i].expireBar.setProperty(prop.MORE, {

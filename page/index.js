@@ -13,23 +13,22 @@ Page(
             this.getTOTPData()
                 .then((x) => {
                     app._options.globalData.TOTPS = JSON.parse(x) ?? [];
-                    
+
                     let localStorage = new LocalStorage();
                     localStorage.setItem(
                         "TOTPs",
-                        JSON.stringify(app._options.globalData.TOTPS)
+                        JSON.stringify(app._options.globalData.TOTPS),
                     );
                     this.initPage();
                 })
                 .catch((x) => {
                     console.log(`Init failed: ${x}`);
-                    try{
+                    try {
                         let localStorage = new LocalStorage();
                         app._options.globalData.TOTPS = JSON.parse(
-                        localStorage.getItem("TOTPs", [])
+                            localStorage.getItem("TOTPs", []),
                         );
-                    }
-                    catch{
+                    } catch {
                         app._options.globalData.TOTPS = [];
                     }
                     this.initPage();
@@ -56,5 +55,5 @@ Page(
                 method: "totps",
             });
         },
-    })
+    }),
 );

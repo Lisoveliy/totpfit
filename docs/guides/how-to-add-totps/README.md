@@ -6,7 +6,7 @@ To add 2FA TOTP records using 2FA TOTP QR-Codes, you must scan QR-Code of servic
 
 ![QR Code with URI](image.png)
 
-Copy this URI string and paste it to app using button *"Add new TOTP record"*:
+Copy this URI string and paste it to app using button _"Add new TOTP record"_:
 
 ![Add new TOTP record popup](image-2.png)
 
@@ -18,7 +18,7 @@ You can edit your otpauth:// records using button "Change TOTP link". Your previ
 
 ### If you use google migrations (otpauth-migration:// links)
 
-To add 2FA TOTP recods using migration from Google Authenticator app, you must go to menu, select "Transfer accounts" -> "Export accounts" 
+To add 2FA TOTP recods using migration from Google Authenticator app, you must go to menu, select "Transfer accounts" -> "Export accounts"
 
 Select codes then screenshot QR code and scan (decode) it to a URI. Use any app providing scan from image, ex: "Search screen" function (Google Lens) on Google Assistant.
 
@@ -26,7 +26,7 @@ For example, this QR-Code will represent next URI string:
 
 ![Google lens scan from Google Authenticator](image-5.png)
 
-After scaning copy this URI string and paste it to app using button *"Add new TOTP record"*:
+After scaning copy this URI string and paste it to app using button _"Add new TOTP record"_:
 
 ![Add new TOTP record using otpauth-migration](image-6.png)
 

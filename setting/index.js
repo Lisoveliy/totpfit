@@ -9,30 +9,33 @@ const colors = {
     text: "#fafafa",
     alert: "#ad3c23",
     notify: "#555555",
-    bigText: "#fafafa"
+    bigText: "#fafafa",
 };
 
 AppSettingsPage({
     build(props) {
         _props = props;
         const storage = JSON.parse(
-            props.settingsStorage.getItem("TOTPs") ?? "[]"
+            props.settingsStorage.getItem("TOTPs") ?? "[]",
         );
         const totpEntrys = GetTOTPList(storage);
-        const addTOTPsHint = storage.length < 1 ?
-            Text({
-                paragraph: true,
-                align: "center",
-                style: {
-                    paddingTop: "10px",
-                    marginBottom: "10px",
-                    color: colors.text,
-                    fontSize: 16,
-                    verticalAlign: "middle",
-                },
-            },
-                "For add a 2FA TOTP record you must have otpauth:// link or otpauth-migration:// link from Google Authenticator Migration QR-Code"
-            ) : null;
+        const addTOTPsHint =
+            storage.length < 1
+                ? Text(
+                      {
+                          paragraph: true,
+                          align: "center",
+                          style: {
+                              paddingTop: "10px",
+                              marginBottom: "10px",
+                              color: colors.text,
+                              fontSize: 16,
+                              verticalAlign: "middle",
+                          },
+                      },
+                      "For add a 2FA TOTP record you must have otpauth:// link or otpauth-migration:// link from Google Authenticator Migration QR-Code",
+                  )
+                : null;
         const createButton = TextInput({
             placeholder: "otpauth(-migration)://",
             label: "Add new TOTP record",
@@ -43,8 +46,7 @@ AppSettingsPage({
                     return;
                 }
 
-                if (Array.isArray(link))
-                    storage.push(...link);
+                if (Array.isArray(link)) storage.push(...link);
                 else storage.push(link);
 
                 updateStorage(storage);
@@ -61,7 +63,7 @@ AppSettingsPage({
                 position: storage.length < 1 ? "absolute" : null, //TODO: Сделать что-то с этим кошмаром
                 bottom: storage.length < 1 ? "0px" : null,
                 left: storage.length < 1 ? "0px" : null,
-                right: storage.length < 1 ? "0px" : null
+                right: storage.length < 1 ? "0px" : null,
             },
         });
 
@@ -79,35 +81,40 @@ AppSettingsPage({
                             textAlign: "center",
                         },
                     },
-                    storage.length < 1 ? addTOTPsHint : Text(
-                        {
-                            align: "center",
-                            paragraph: true,
-                            style: {
-                                marginBottom: "10px",
-                                color: colors.bigText,
-                                fontSize: 23,
-                                fontWeight: "500",
-                                verticalAlign: "middle",
-                            },
-                        },
-                        "TOTP records:"
-                    )
+                    storage.length < 1
+                        ? addTOTPsHint
+                        : Text(
+                              {
+                                  align: "center",
+                                  paragraph: true,
+                                  style: {
+                                      marginBottom: "10px",
+                                      color: colors.bigText,
+                                      fontSize: 23,
+                                      fontWeight: "500",
+                                      verticalAlign: "middle",
+                                  },
+                              },
+                              "TOTP records:",
+                          ),
                 ),
                 ...totpEntrys,
                 createButton,
-                View({
-                    style: {
-                        display: "flex",
-                        justifyContent: "center"
-                    }
-                },
-                    Link({
-                        source: "https://github.com/Lisoveliy/totpfit/blob/main/docs/guides/how-to-add-totps/README.md"
+                View(
+                    {
+                        style: {
+                            display: "flex",
+                            justifyContent: "center",
+                        },
                     },
-                        "Instruction | Report issue (GitHub)")
+                    Link(
+                        {
+                            source: "https://github.com/Lisoveliy/totpfit/blob/main/docs/guides/how-to-add-totps/README.md",
+                        },
+                        "Instruction | Report issue (GitHub)",
+                    ),
                 ),
-            ]
+            ],
         );
         return body;
     },
@@ -124,8 +131,7 @@ function GetTOTPList(storage) {
             onChange: (changes) => {
                 try {
                     let link = getTOTPByLink(changes);
-                    if (Array.isArray(link))
-                        return;
+                    if (Array.isArray(link)) return;
 
                     storage[elementId] = link;
                     updateStorage(storage);
@@ -152,16 +158,16 @@ function GetTOTPList(storage) {
                 style: {
                     color: colors.text,
                     fontSize: "18px",
-                    fontWeight: "500"
+                    fontWeight: "500",
                 },
                 paragraph: true,
             },
-            `${element.issuer}: ${element.client}`
+            `${element.issuer}: ${element.client}`,
         );
         const delButton = Button({
             onClick: () => {
                 storage = storage.filter(
-                    (x) => storage.indexOf(x) != elementId
+                    (x) => storage.indexOf(x) != elementId,
                 );
                 updateStorage(storage);
             },
@@ -182,7 +188,7 @@ function GetTOTPList(storage) {
                 },
                 align: "center",
             },
-            `${element.hashType} | ${element.digits} digits | ${element.fetchTime} seconds | ${element.timeOffset} sec offset`
+            `${element.hashType} | ${element.digits} digits | ${element.fetchTime} seconds | ${element.timeOffset} sec offset`,
         );
         const view = View(
             {
@@ -204,9 +210,9 @@ function GetTOTPList(storage) {
                             gridTemplateColumns: "1fr 100px",
                         },
                     },
-                    [textInput, delButton]
+                    [textInput, delButton],
                 ),
-            ]
+            ],
         );
         totpEntrys.push({ text: text, view: view });
         counter++;

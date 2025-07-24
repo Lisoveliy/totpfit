@@ -77,7 +77,7 @@ export function RenderOTPValue(position, otpValue) {
 export function RenderExpireBar(position, createdTime, fetchTime) {
     const yPos = getYPos(position);
     const expireDif = Math.abs(
-        (Date.now() - createdTime) / 1000 / fetchTime - 1
+        (Date.now() - createdTime) / 1000 / fetchTime - 1,
     );
     return createWidget(widget.ARC, {
         x: buttonWidth - 50,
