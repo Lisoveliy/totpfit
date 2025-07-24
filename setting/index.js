@@ -1,16 +1,7 @@
 import { getTOTPByLink } from "./utils/queryParser.js";
+import { colors, content } from "./consts.js";
 
 let _props = null;
-
-const colors = {
-    bg: "#101010",
-    linkBg: "#ffffffc0",
-    secondaryBg: "#282828",
-    text: "#fafafa",
-    alert: "#ad3c23",
-    notify: "#555555",
-    bigText: "#fafafa",
-};
 
 AppSettingsPage({
     build(props) {
@@ -22,23 +13,23 @@ AppSettingsPage({
         const addTOTPsHint =
             storage.length < 1
                 ? Text(
-                      {
-                          paragraph: true,
-                          align: "center",
-                          style: {
-                              paddingTop: "10px",
-                              marginBottom: "10px",
-                              color: colors.text,
-                              fontSize: 16,
-                              verticalAlign: "middle",
-                          },
-                      },
-                      "For add a 2FA TOTP record you must have otpauth:// link or otpauth-migration:// link from Google Authenticator Migration QR-Code",
-                  )
+                    {
+                        paragraph: true,
+                        align: "center",
+                        style: {
+                            paddingTop: "10px",
+                            marginBottom: "10px",
+                            color: colors.text,
+                            fontSize: 16,
+                            verticalAlign: "middle",
+                        },
+                    },
+                    content.addTotpsHint,
+                )
                 : null;
         const createButton = TextInput({
-            placeholder: "otpauth(-migration)://",
-            label: "Add new TOTP record",
+            placeholder: content.createButton.placeHolder,
+            label: content.createButton.label,
             onChange: (changes) => {
                 let link = getTOTPByLink(changes);
                 if (link == null) {
@@ -84,19 +75,19 @@ AppSettingsPage({
                     storage.length < 1
                         ? addTOTPsHint
                         : Text(
-                              {
-                                  align: "center",
-                                  paragraph: true,
-                                  style: {
-                                      marginBottom: "10px",
-                                      color: colors.bigText,
-                                      fontSize: 23,
-                                      fontWeight: "500",
-                                      verticalAlign: "middle",
-                                  },
-                              },
-                              "TOTP records:",
-                          ),
+                            {
+                                align: "center",
+                                paragraph: true,
+                                style: {
+                                    marginBottom: "10px",
+                                    color: colors.bigText,
+                                    fontSize: 23,
+                                    fontWeight: "500",
+                                    verticalAlign: "middle",
+                                },
+                            },
+                            "TOTP records:",
+                        ),
                 ),
                 ...totpEntrys,
                 createButton,
@@ -109,9 +100,9 @@ AppSettingsPage({
                     },
                     Link(
                         {
-                            source: "https://github.com/Lisoveliy/totpfit/blob/main/docs/guides/how-to-add-totps/README.md",
+                            source: content.instructionLink.source,
                         },
-                        "Instruction | Report issue (GitHub)",
+                        content.instructionLink.label,
                     ),
                 ),
             ],
@@ -120,14 +111,31 @@ AppSettingsPage({
     },
 });
 
+/**
+ * Get DOM elements of TOTP records
+ * @param {*} storage Array of TOTP objects
+ * @returns Array of DOM elements
+ */
 function GetTOTPList(storage) {
     let totpEntrys = [];
     let counter = 0;
     storage.forEach((element) => {
         const elementId = counter;
-        const textInput = TextInput({
-            placeholder: "otpauth(-migration)://",
-            label: "Change TOTP link",
+        const totpLabelText = Text(
+            {
+                align: "center",
+                style: {
+                    color: colors.text,
+                    fontSize: "18px",
+                    fontWeight: "500",
+                },
+                paragraph: true,
+            },
+            content.totpLabelText.eval(element.issuer, element.client),
+        );
+        const changeButton = TextInput({
+            placeholder: content.changeButton.placeHolder,
+            label: content.changeButton.label,
             onChange: (changes) => {
                 try {
                     let link = getTOTPByLink(changes);
@@ -152,19 +160,17 @@ function GetTOTPList(storage) {
                 borderRadius: "5px",
             },
         });
-        const textBig = Text(
+        const totpDescText = Text(
             {
-                align: "center",
                 style: {
                     color: colors.text,
-                    fontSize: "18px",
-                    fontWeight: "500",
+                    fontSize: "14px",
                 },
-                paragraph: true,
+                align: "center",
             },
-            `${element.issuer}: ${element.client}`,
+            content.totpDescText.eval(element.hashType, element.digits, element.fetchTime, element.timeOffset),
         );
-        const delButton = Button({
+        const deleteButton = Button({
             onClick: () => {
                 storage = storage.filter(
                     (x) => storage.indexOf(x) != elementId,
@@ -178,31 +184,20 @@ function GetTOTPList(storage) {
                 height: "fit-content",
                 margin: "10px",
             },
-            label: "Delete",
+            label: content.deleteButton.label,
         });
-        const text = Text(
-            {
-                style: {
-                    color: colors.text,
-                    fontSize: "14px",
-                },
-                align: "center",
-            },
-            `${element.hashType} | ${element.digits} digits | ${element.fetchTime} seconds | ${element.timeOffset} sec offset`,
-        );
         const view = View(
             {
                 style: {
                     textAlign: "center",
                     backgroundColor: colors.secondaryBg,
-                    //border: "2px solid white",
                     borderRadius: "5px",
                     margin: "10px",
                 },
             },
             [
-                textBig,
-                text,
+                totpLabelText,
+                totpDescText,
                 View(
                     {
                         style: {
@@ -210,17 +205,21 @@ function GetTOTPList(storage) {
                             gridTemplateColumns: "1fr 100px",
                         },
                     },
-                    [textInput, delButton],
+                    [changeButton, deleteButton],
                 ),
             ],
         );
-        totpEntrys.push({ text: text, view: view });
+        totpEntrys.push({ text: totpDescText, view: view });
         counter++;
     });
 
     return totpEntrys.map((x) => x.view);
 }
 
+/**
+ * Update 
+ * @param {*} storage Array of TOTP objects
+ */
 function updateStorage(storage) {
     _props.settingsStorage.setItem("TOTPs", JSON.stringify(storage));
 }
