@@ -1,5 +1,5 @@
 # TOTPFIT 
-### Another 2FAuthenticator based on TOTP for Zepp Amazfit GTS 4 with Google Authenticator migration Support
+### Another 2FAuthenticator based on TOTP for Zepp Amazfit GTS 4 with Google Authenticator migration support
 
 ![alt text](docs/assets/image2.png)
 
