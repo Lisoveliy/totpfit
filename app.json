@@ -5,12 +5,12 @@
     "appName": "totpfit",
     "appType": "app",
     "version": {
-      "code": 1,
-      "name": "1.3.1"
+      "code": 3,
+      "name": "1.4.0"
     },
     "icon": "icon.png",
     "vender": "zepp",
-    "description": "Another 2FAuthenticator based on TOTP for Zepp Amazfit GTS 4"
+    "description": "Another 2FAuthenticator based on TOTP for Zepp OS"
   },
   "permissions": [
     "data:os.device.info",
