@@ -2,6 +2,7 @@ import { RenderAddButton } from "./render/totpRenderer";
 import { initLoop } from "./render/index/renderer";
 import { BasePage } from "@zeppos/zml/base-page";
 import { LocalStorage } from "@zos/storage";
+import { setPageBrightTime } from '@zos/display';
 
 const app = getApp();
 
@@ -10,10 +11,13 @@ let waitForFetch = true;
 Page(
     BasePage({
         onInit() {
+            setPageBrightTime({
+              brightTime: 300000,
+            });
             this.getTOTPData()
                 .then((x) => {
                     app._options.globalData.TOTPS = JSON.parse(x) ?? [];
-                    
+
                     let localStorage = new LocalStorage();
                     localStorage.setItem(
                         "TOTPs",
