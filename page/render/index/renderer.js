@@ -6,10 +6,6 @@ import {
     RenderTOTPContainer,
 } from "../totpRenderer";
 
-/**
- *
- * @param {Array<TOTP>} buffer
- */
 export function initLoop(buffer) {
     renderContainers(buffer);
     renderTOTPs(buffer);
@@ -22,11 +18,18 @@ function renderContainers(buffer) {
 }
 
 const renderData = [];
+const formatOTP = (otp) => {
+    if (otp.length === 6) {
+        return otp.substring(0, 3) + " " + otp.substring(3);
+    }
+    return otp;
+};
+
 function renderTOTPs(buffer) {
     for (let i = 0; i < buffer.length; i++) {
         let otpData = TOTP.copy(buffer[i]).getOTP();
         renderData[i] = {
-            OTP: RenderOTPValue(i, otpData.otp),
+            OTP: RenderOTPValue(i, formatOTP(otpData.otp)),
             expireBar: RenderExpireBar(
                 i,
                 otpData.createdTime,
@@ -49,7 +52,7 @@ function renderTOTPs(buffer) {
             if (otpData.expireTime < Date.now()) {
                 otpData = TOTP.copy(buffer[i]).getOTP();
                 renderData[i].OTP.setProperty(prop.MORE, {
-                    text: otpData.otp,
+                    text: formatOTP(otpData.otp),
                 });
             }
         }, 50);
