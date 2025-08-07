@@ -33,7 +33,7 @@ AppSettingsPage({
                 verticalAlign: "middle",
             },
         },
-            "Для добавления записи вставьте ссылку."
+            "For add a 2FA TOTP record you must have otpauth:// link or otpauth-migration:// link from Google Authenticator Migration QR-Code"
         );
 
         const createButton = TextInput({
