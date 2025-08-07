@@ -1,9 +1,11 @@
 import { getTOTPByLink } from "./utils/queryParser.js";
+import { createTOTPCard } from "./ui/Card.js";
 
 let _props = null;
 let editingIndex = -1;
 let tempIssuer = "";
 let tempClient = "";
+let errorMessage = "";
 
 const colors = {
     bg: "#101010",
@@ -14,6 +16,53 @@ const colors = {
     notify: "#555555",
     bigText: "#fafafa"
 };
+
+function updateStorage(storage) {
+    _props.settingsStorage.setItem("TOTPs", JSON.stringify(storage));
+}
+
+function GetTOTPList(storage) {
+    return storage.map((element, index) => {
+        return createTOTPCard({
+            element,
+            index,
+            storage,
+            isEditing: editingIndex === index,
+            tempIssuer,
+            tempClient,
+            onIssuerChange: (val) => { tempIssuer = val; },
+            onClientChange: (val) => { tempClient = val; },
+            onRename: () => {
+                editingIndex = index;
+                tempIssuer = element.issuer;
+                tempClient = element.client;
+                updateStorage(storage);
+            },
+            onSave: () => {
+                storage[index].issuer = tempIssuer;
+                storage[index].client = tempClient;
+                editingIndex = -1;
+                updateStorage(storage);
+            },
+            onDelete: () => {
+                storage.splice(index, 1);
+                updateStorage(storage);
+            },
+            onMoveUp: () => {
+                if (index > 0) {
+                    [storage[index], storage[index - 1]] = [storage[index - 1], storage[index]];
+                    updateStorage(storage);
+                }
+            },
+            onMoveDown: () => {
+                if (index < storage.length - 1) {
+                    [storage[index], storage[index + 1]] = [storage[index + 1], storage[index]];
+                    updateStorage(storage);
+                }
+            }
+        });
+    });
+}
 
 AppSettingsPage({
     build(props) {
@@ -33,24 +82,30 @@ AppSettingsPage({
                 verticalAlign: "middle",
             },
         },
-            "For add a 2FA TOTP record you must have otpauth:// link or otpauth-migration:// link from Google Authenticator Migration QR-Code"
+            "To add an entry, insert a link."
         );
 
         const createButton = TextInput({
             placeholder: "otpauth(-migration)://",
             label: "Add",
             onChange: (changes) => {
-                let link = getTOTPByLink(changes);
-                if (link == null) {
-                    console.log("link is invalid");
-                    return;
+                try {
+                    errorMessage = "";
+                    let link = getTOTPByLink(changes);
+                    if (link == null) {
+                        throw new Error("Unsupported link type. Please use an otpauth:// link.");
+                    }
+
+                    if (Array.isArray(link)) {
+                        storage.push(...link);
+                    } else {
+                        storage.push(link);
+                    }
+                    updateStorage(storage);
+                } catch (e) {
+                    errorMessage = e.message;
+                    updateStorage(storage);
                 }
-
-                if (Array.isArray(link))
-                    storage.push(...link);
-                else storage.push(link);
-
-                updateStorage(storage);
             },
             labelStyle: {
                 backgroundColor: colors.notify,
@@ -66,12 +121,16 @@ AppSettingsPage({
             },
         });
 
+        const errorText = errorMessage ? Text({
+            style: { color: colors.alert, textAlign: 'center', margin: '5px' }
+        }, errorMessage) : null;
+
         const bottomContainer = View({
             style: {
                 padding: '5px 0px',
                 backgroundColor: colors.bg,
             }
-        }, [createButton]);
+        }, [errorText, createButton].filter(Boolean));
 
         const pageContainer = View({
             style: {
@@ -131,116 +190,3 @@ AppSettingsPage({
         return pageContainer;
     },
 });
-
-function GetTOTPList(storage) {
-    let totpEntrys = [];
-    storage.forEach((element, index) => {
-        const isEditing = editingIndex === index;
-
-        const issuerText = Text({ style: { color: colors.text, marginBottom: '2px' } }, `Issuer: ${element.issuer}`);
-        const clientText = Text({ style: { color: colors.text } }, `Client: ${element.client}`);
-
-        const issuerInput = TextInput({
-            label: "Issuer",
-            value: isEditing ? tempIssuer : element.issuer,
-            onChange: (val) => { tempIssuer = val; }
-        });
-        const clientInput = TextInput({
-            label: "Client",
-            value: isEditing ? tempClient : element.client,
-            onChange: (val) => { tempClient = val; }
-        });
-
-        const renameButton = Button({
-            label: "Rename",
-            style: { margin: "5px", backgroundColor: colors.notify, color: colors.text },
-            onClick: () => {
-                editingIndex = index;
-                tempIssuer = element.issuer;
-                tempClient = element.client;
-                updateStorage(storage);
-            }
-        });
-
-        const saveButton = Button({
-            label: "Save",
-            style: { margin: "5px", backgroundColor: '#28a745', color: colors.text },
-            onClick: () => {
-                storage[index].issuer = tempIssuer;
-                storage[index].client = tempClient;
-                editingIndex = -1;
-                updateStorage(storage);
-            }
-        });
-
-        const delButton = Button({
-            label: "Delete",
-            style: { margin: "5px", backgroundColor: colors.alert, color: colors.text },
-            onClick: () => {
-                storage.splice(index, 1);
-                updateStorage(storage);
-            },
-        });
-
-        const upButton = Button({
-            label: "↑",
-            disabled: index === 0,
-            style: { width: '50px', margin: '2px' },
-            onClick: () => {
-                if (index > 0) {
-                    [storage[index], storage[index - 1]] = [storage[index - 1], storage[index]];
-                    updateStorage(storage);
-                }
-            }
-        });
-
-        const downButton = Button({
-            label: "↓",
-            disabled: index === storage.length - 1,
-            style: { width: '50px', margin: '2px' },
-            onClick: () => {
-                if (index < storage.length - 1) {
-                    [storage[index], storage[index + 1]] = [storage[index + 1], storage[index]];
-                    updateStorage(storage);
-                }
-            }
-        });
-
-        const infoView = View({ style: { display: 'flex', flexDirection: 'column', alignItems: 'flex-start' } }, isEditing ? [issuerInput, clientInput] : [issuerText, clientText]);
-        const buttonsView = View({ style: { display: 'flex', flexDirection: 'row' } }, isEditing ? [saveButton] : [renameButton, delButton]);
-        const reorderView = View({ style: { display: 'flex', flexDirection: 'column' } }, [upButton, downButton]);
-
-        const mainContent = View(
-            { style: { flexGrow: 1, padding: '5px' } },
-            [
-                infoView,
-                Text({ style: { color: colors.text, fontSize: "14px", marginTop: '5px' } },
-                    `${element.hashType} | ${element.digits} digits | ${element.fetchTime} seconds | ${element.timeOffset} sec offset`
-                ),
-                buttonsView
-            ]
-        );
-
-        const card = View({
-            style: {
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                backgroundColor: colors.secondaryBg,
-                borderRadius: "5px",
-                margin: "10px",
-                padding: "5px"
-            }
-        }, [mainContent, reorderView]);
-
-
-        totpEntrys.push(card);
-    });
-
-    return totpEntrys;
-}
-
-function updateStorage(storage) {
-    _props.settingsStorage.setItem("TOTPs", JSON.stringify(storage));
-}
