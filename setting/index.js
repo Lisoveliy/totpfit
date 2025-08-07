@@ -1,9 +1,7 @@
 import { getTOTPByLink } from "./utils/queryParser.js";
 
 let _props = null;
-// Индекс редактируемого элемента. -1 означает, что ничего не редактируется.
 let editingIndex = -1;
-// Временные значения для полей ввода при редактировании
 let tempIssuer = "";
 let tempClient = "";
 
@@ -38,7 +36,6 @@ AppSettingsPage({
             "Для добавления записи вставьте ссылку."
         );
 
-        // Кнопка "Добавить", переименована
         const createButton = TextInput({
             placeholder: "otpauth(-migration)://",
             label: "Добавить",
@@ -69,16 +66,13 @@ AppSettingsPage({
             },
         });
 
-        // Контейнер для кнопки, закрепленный внизу
         const bottomContainer = View({
             style: {
-                // Стили для закрепления внизу
                 padding: '5px 0px',
                 backgroundColor: colors.bg,
             }
         }, [createButton]);
 
-        // Основной контейнер страницы, который не прокручивается
         const pageContainer = View({
             style: {
                 backgroundColor: colors.bg,
@@ -88,7 +82,6 @@ AppSettingsPage({
                 justifyContent: 'space-between'
             }
         }, [
-            // Верхняя часть (заголовок)
             View({
                 style: {
                     textAlign: "center",
@@ -110,7 +103,6 @@ AppSettingsPage({
                 )
             ]),
 
-            // Контейнер для списка, который будет прокручиваться
             View({
                 style: {
                     flexGrow: 1,
@@ -133,11 +125,9 @@ AppSettingsPage({
                 ),
             ]),
 
-            // Нижняя часть (закрепленная кнопка)
             bottomContainer
         ]);
 
-        // Возвращаем единый контейнер для всей страницы
         return pageContainer;
     },
 });
@@ -147,11 +137,9 @@ function GetTOTPList(storage) {
     storage.forEach((element, index) => {
         const isEditing = editingIndex === index;
 
-        // --- Элементы для отображения ---
         const issuerText = Text({ style: { color: colors.text, marginBottom: '2px' } }, `Issuer: ${element.issuer}`);
         const clientText = Text({ style: { color: colors.text } }, `Client: ${element.client}`);
 
-        // --- Элементы для редактирования ---
         const issuerInput = TextInput({
             label: "Issuer",
             value: isEditing ? tempIssuer : element.issuer,
@@ -163,7 +151,6 @@ function GetTOTPList(storage) {
             onChange: (val) => { tempClient = val; }
         });
 
-        // --- Кнопки ---
         const renameButton = Button({
             label: "Rename",
             style: { margin: "5px", backgroundColor: colors.notify, color: colors.text },
@@ -195,7 +182,6 @@ function GetTOTPList(storage) {
             },
         });
 
-        // --- Кнопки перемещения ---
         const upButton = Button({
             label: "↑",
             disabled: index === 0,
