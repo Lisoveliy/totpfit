@@ -38,7 +38,7 @@ AppSettingsPage({
 
         const createButton = TextInput({
             placeholder: "otpauth(-migration)://",
-            label: "Добавить",
+            label: "Add",
             onChange: (changes) => {
                 let link = getTOTPByLink(changes);
                 if (link == null) {
