@@ -6,22 +6,25 @@ import { ProtonBackupExport } from "./protonBackupExport";
 const otpauthScheme = "otpauth://";
 const googleMigrationScheme = "otpauth-migration://";
 export function getTOTPByLink(link) {
-    try { //proton export
+    try {
+        //proton export
         const json = JSON.parse(link);
-        console.log(json)
+        console.log(json);
         return getByProtonBackup(json);
-
     } catch (e) {
-        if (link.startsWith(googleMigrationScheme)) { //google migration export
+        if (link.startsWith(googleMigrationScheme)) {
+            //google migration export
             return getByGoogleMigrationScheme(link);
         }
-        if (link.startsWith(otpauthScheme)) {//otpauth export
+        if (link.startsWith(otpauthScheme)) {
+            //otpauth export
             return getByOtpauthScheme(link);
         }
-        throw new Error(`Unsupported link type. Please use an otpauth:// or otpauth-migration:// link\n ERR: ${e}`);
+        throw new Error(
+            `Unsupported link type. Please use an otpauth:// or otpauth-migration:// link\n ERR: ${e}`,
+        );
     }
 }
-
 
 function getHashType(algorithm) {
     if (algorithm == "SHA1") return "SHA-1";
@@ -32,17 +35,21 @@ function getHashType(algorithm) {
 
 function getByProtonBackup(protonjson) {
     try {
-        if ("entries" in protonjson && protonjson.version == 1) { //Is proton export?
-            console.log(1)
-            const protonBE = Object.assign(new ProtonBackupExport(), protonjson)
-            const res = protonBE.entries.map(x => {
+        if ("entries" in protonjson && protonjson.version == 1) {
+            //Is proton export?
+            console.log(1);
+            const protonBE = Object.assign(
+                new ProtonBackupExport(),
+                protonjson,
+            );
+            const res = protonBE.entries.map((x) => {
                 return getByOtpauthScheme(x.content.uri);
             });
-            console.log(res)
+            console.log(res);
             return res;
         } else throw new Error("use proton export backup with version: 1");
     } catch (e) {
-        console.log(e)
+        console.log(e);
         throw new Error(`Unsupported JSON type: ${e}`);
     }
 }

@@ -14,7 +14,7 @@ export function createTOTPCard({
     onMoveDown,
     onIssuerChange,
     onClientChange,
-    isEditInProgress
+    isEditInProgress,
 }) {
     const infoView = View(
         {
@@ -40,7 +40,7 @@ export function createTOTPCard({
                           color: colors.text,
                           borderRadius: "5px",
                           height: "40px",
-                          width: "200px"
+                          width: "200px",
                       },
                       subStyle: {
                           display: "none",
@@ -60,7 +60,7 @@ export function createTOTPCard({
                           color: colors.text,
                           borderRadius: "5px",
                           height: "40px",
-                          width: "200px"
+                          width: "200px",
                       },
                       subStyle: {
                           display: "none",
@@ -109,16 +109,17 @@ export function createTOTPCard({
                       },
                       onClick: onRename,
                   }),
-                  !isEditInProgress ?
-                  Button({
-                      label: content.deleteButton.label,
-                      style: {
-                          margin: "5px",
-                          backgroundColor: colors.alert,
-                          color: colors.text,
-                      },
-                      onClick: onDelete,
-                  }): null,
+                  !isEditInProgress
+                      ? Button({
+                            label: content.deleteButton.label,
+                            style: {
+                                margin: "5px",
+                                backgroundColor: colors.alert,
+                                color: colors.text,
+                            },
+                            onClick: onDelete,
+                        })
+                      : null,
               ],
     );
 

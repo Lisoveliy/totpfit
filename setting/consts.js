@@ -11,7 +11,7 @@ export const colors = {
 export const content = {
     addTotpsHint:
         "For add a 2FA TOTP record you must have otpauth:// link otpauth-migration://" +
-        "link from Google Authenticator Migration QR-Code or Proton authenticator Export JSON string." + 
+        "link from Google Authenticator Migration QR-Code or Proton authenticator Export JSON string." +
         "If you have a questions - check instruction below!",
     totpRecordsHint: "TOTP records:",
     createButton: {
@@ -29,10 +29,10 @@ export const content = {
     renameButtons: {
         rename: "Rename",
         renameIssuer: "Rename Issuer",
-        renameClient: "Rename Client"
+        renameClient: "Rename Client",
     },
     saveButton: {
-        label: "Save"
+        label: "Save",
     },
     deleteButton: {
         label: "Delete",

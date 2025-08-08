@@ -7,5 +7,5 @@ export class ProtonTotpRecord {
     content = {
         uri,
         entry_type,
-    }
+    };
 }

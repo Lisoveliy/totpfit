@@ -32,11 +32,10 @@ Then press OK, all selected records from Google Authenticator will appear on pag
 
 ![Added records from otpauth-migration](image-7.png)
 
-
 ### If you use Proton Authenticator
 
 To add 2FA TOTP records from Proton Authenticator you must go to settings and press "Export":
- ![alt text](photo_2025-08-08_17-10-27.jpg)
+![alt text](photo_2025-08-08_17-10-27.jpg)
 
 After this save file and open it on text editor:
 
