@@ -14,6 +14,7 @@ export function createTOTPCard({
     onMoveDown,
     onIssuerChange,
     onClientChange,
+    isEditInProgress,
 }) {
     const infoView = View(
         {
@@ -26,7 +27,7 @@ export function createTOTPCard({
         isEditing
             ? [
                   TextInput({
-                      label: "Rename Issuer",
+                      label: content.renameButtons.renameIssuer,
                       value: tempIssuer,
                       onChange: onIssuerChange,
                       labelStyle: {
@@ -39,14 +40,14 @@ export function createTOTPCard({
                           color: colors.text,
                           borderRadius: "5px",
                           height: "40px",
-                          width: "200px"
+                          width: "200px",
                       },
                       subStyle: {
                           display: "none",
                       },
                   }),
                   TextInput({
-                      label: "Rename client",
+                      label: content.renameButtons.renameClient,
                       value: tempClient,
                       onChange: onClientChange,
                       labelStyle: {
@@ -59,7 +60,7 @@ export function createTOTPCard({
                           color: colors.text,
                           borderRadius: "5px",
                           height: "40px",
-                          width: "200px"
+                          width: "200px",
                       },
                       subStyle: {
                           display: "none",
@@ -89,7 +90,7 @@ export function createTOTPCard({
         isEditing
             ? [
                   Button({
-                      label: "Save",
+                      label: content.saveButton.label,
                       style: {
                           margin: "5px",
                           backgroundColor: "#28a745",
@@ -100,7 +101,7 @@ export function createTOTPCard({
               ]
             : [
                   Button({
-                      label: "Rename",
+                      label: content.renameButtons.rename,
                       style: {
                           margin: "5px",
                           backgroundColor: colors.notify,
@@ -108,15 +109,17 @@ export function createTOTPCard({
                       },
                       onClick: onRename,
                   }),
-                  Button({
-                      label: "Delete",
-                      style: {
-                          margin: "5px",
-                          backgroundColor: colors.alert,
-                          color: colors.text,
-                      },
-                      onClick: onDelete,
-                  }),
+                  !isEditInProgress
+                      ? Button({
+                            label: content.deleteButton.label,
+                            style: {
+                                margin: "5px",
+                                backgroundColor: colors.alert,
+                                color: colors.text,
+                            },
+                            onClick: onDelete,
+                        })
+                      : null,
               ],
     );
 
@@ -127,7 +130,6 @@ export function createTOTPCard({
                 label: "⬆",
                 disabled: index === 0,
                 style: {
-                    width: "50px",
                     margin: "2px",
                     color: colors.text,
                     backgroundColor: colors.notify,
@@ -138,7 +140,6 @@ export function createTOTPCard({
                 label: "⬇",
                 disabled: index === storage.length - 1,
                 style: {
-                    width: "50px",
                     margin: "2px",
                     color: colors.text,
                     backgroundColor: colors.notify,

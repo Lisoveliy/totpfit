@@ -31,7 +31,7 @@ function GetTOTPList(storage) {
                 editingIndex = index;
                 tempIssuer = element.issuer;
                 tempClient = element.client;
-                updateStorage(storage);
+                _props.settingsStorage.setItem("requestUpdate", Math.random());
             },
             onSave: () => {
                 storage[index].issuer = tempIssuer;
@@ -61,6 +61,7 @@ function GetTOTPList(storage) {
                     updateStorage(storage);
                 }
             },
+            isEditInProgress: editingIndex !== -1,
         });
     });
 }
@@ -97,11 +98,6 @@ AppSettingsPage({
                 try {
                     errorMessage = "";
                     let link = getTOTPByLink(changes);
-                    if (link == null) {
-                        throw new Error(
-                            "Unsupported link type. Please use an otpauth:// or otpauth-migration:// link",
-                        );
-                    }
 
                     if (Array.isArray(link)) {
                         storage.push(...link);
@@ -119,7 +115,9 @@ AppSettingsPage({
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                margin: "10px",
+                marginBottom: "10px",
+                marginLeft: "10px",
+                marginRight: "10px",
                 fontSize: "20px",
                 color: colors.text,
                 borderRadius: "5px",
@@ -137,7 +135,7 @@ AppSettingsPage({
                   },
                   errorMessage,
               )
-            : null; //TODO: Check for work
+            : null;
 
         const bottomContainer = View(
             {
@@ -151,8 +149,8 @@ AppSettingsPage({
                         style: {
                             display: "flex",
                             justifyContent: "center",
-                            marginTop: "20px",
-                            marginBottom: "20px",
+                            marginTop: "10px",
+                            marginBottom: "10px",
                         },
                     },
                     Link(

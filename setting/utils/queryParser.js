@@ -1,11 +1,139 @@
 import { decodeProto, TYPES } from "../../lib/protobuf-decoder/protobufDecoder";
 import { TOTP } from "../../lib/totp-quickjs";
 import { base64decode, encode } from "../../lib/totp-quickjs/base32decoder";
+import { ProtonBackupExport } from "./protonBackupExport";
 
 const otpauthScheme = "otpauth://";
 const googleMigrationScheme = "otpauth-migration://";
+export function getTOTPByLink(link) {
+    try {
+        //proton export
+        const json = JSON.parse(link);
+        console.log(json);
+        return getByProtonBackup(json);
+    } catch (e) {
+        if (link.startsWith(googleMigrationScheme)) {
+            //google migration export
+            return getByGoogleMigrationScheme(link);
+        }
+        if (link.startsWith(otpauthScheme)) {
+            //otpauth export
+            return getByOtpauthScheme(link);
+        }
+        throw new Error(
+            `Unsupported link type. Please use an otpauth:// or otpauth-migration:// link\n ERR: ${e}`,
+        );
+    }
+}
 
-function _parseSingleMigrationEntry(part) {
+function getHashType(algorithm) {
+    if (algorithm == "SHA1") return "SHA-1";
+    if (algorithm == "SHA256") return "SHA-256";
+    if (algorithm == "SHA512") return "SHA-512";
+    else return "SHA-1";
+}
+
+function getByProtonBackup(protonjson) {
+    try {
+        if ("entries" in protonjson && protonjson.version == 1) {
+            //Is proton export?
+            console.log(1);
+            const protonBE = Object.assign(
+                new ProtonBackupExport(),
+                protonjson,
+            );
+            const res = protonBE.entries.map((x) => {
+                return getByOtpauthScheme(x.content.uri);
+            });
+            console.log(res);
+            return res;
+        } else throw new Error("use proton export backup with version: 1");
+    } catch (e) {
+        console.log(e);
+        throw new Error(`Unsupported JSON type: ${e}`);
+    }
+}
+
+function getByOtpauthScheme(link) {
+    try {
+        let args = link.split("?");
+        let path = args[0];
+        let params = args[1];
+
+        let pathParts = path.split("/");
+        let type = pathParts[2]; //hotp or totp
+        let label = decodeURIComponent(pathParts[3]);
+
+        let issuerFromLabel = label.includes(":") ? label.split(":")[0] : null;
+        let client = label.includes(":") ? label.split(":")[1].trim() : label;
+        client = decodeURIComponent(client);
+
+        let secret = params.match(/secret=([^&]*)/)?.[1];
+        let issuerFromParams = params.match(/issuer=([^&]*)/)?.[1];
+
+        let issuer = issuerFromParams
+            ? decodeURIComponent(issuerFromParams)
+            : decodeURIComponent(issuerFromLabel);
+        if (!issuer) issuer = client;
+
+        let period = params.match(/period=([^&]*)/)?.[1];
+        let digits = params.match(/digits=([^&]*)/)?.[1];
+        let algorithm = params.match(/algorithm=([^&]*)/)?.[1];
+        let offset = params.match(/offset=([^&]*)/)?.[1] ?? 0;
+
+        if (type.toLowerCase() != "totp")
+            throw new Error("Type is not valid, requires 'TOTP'");
+
+        if (!secret) throw new Error("Secret not defined");
+
+        return new TOTP(
+            secret,
+            issuer,
+            client,
+            Number(digits) || 6,
+            Number(period) || 30,
+            Number(offset),
+            getHashType(algorithm),
+        );
+    } catch (err) {
+        console.log("Failed to parse otpauth scheme:", err);
+        throw new Error(
+            `Invalid otpauth:// link. Please check the link and try again. ERR: ${err}`,
+        );
+    }
+}
+
+function getByGoogleMigrationScheme(link) {
+    try {
+        const data = link.split("data=")[1];
+        if (!data) return null;
+
+        const decodedData = decodeURIComponent(data);
+        const buffer = base64decode(decodedData);
+        const proto = decodeProto(buffer);
+
+        const totps = [];
+        const otpParameters = proto.parts.filter(
+            (p) => p.index === 1 && p.type === TYPES.LENDELIM,
+        );
+
+        otpParameters.forEach((part) => {
+            const totp = parseSingleMigrationEntry(part);
+            if (totp) {
+                totps.push(totp);
+            }
+        });
+
+        return totps.length > 0 ? totps : null;
+    } catch (err) {
+        console.log("Failed to parse Google Migration scheme:", err);
+        throw new Error(
+            "Invalid otpauth-migration:// link. Failed to parse migration data.",
+        );
+    }
+}
+
+function parseSingleMigrationEntry(part) {
     const totpProto = decodeProto(part.value);
     const otpData = {};
 
@@ -62,102 +190,6 @@ function _parseSingleMigrationEntry(part) {
         0,
         finalAlgo,
     );
-}
-
-function getByGoogleMigrationScheme(link) {
-    try {
-        const data = link.split("data=")[1];
-        if (!data) return null;
-
-        const decodedData = decodeURIComponent(data);
-        const buffer = base64decode(decodedData);
-        const proto = decodeProto(buffer);
-
-        const totps = [];
-        const otpParameters = proto.parts.filter(
-            (p) => p.index === 1 && p.type === TYPES.LENDELIM,
-        );
-
-        otpParameters.forEach((part) => {
-            const totp = _parseSingleMigrationEntry(part);
-            if (totp) {
-                totps.push(totp);
-            }
-        });
-
-        return totps.length > 0 ? totps : null;
-    } catch (err) {
-        console.log("Failed to parse Google Migration scheme:", err);
-        throw new Error(
-            "Invalid otpauth-migration:// link. Failed to parse migration data.",
-        );
-    }
-}
-
-export function getTOTPByLink(link) {
-    if (link.startsWith(googleMigrationScheme)) {
-        return getByGoogleMigrationScheme(link);
-    }
-    if (link.startsWith(otpauthScheme)) {
-        return getByOtpauthScheme(link);
-    }
-
-    return null;
-}
-
-function getHashType(algorithm) {
-    if (algorithm == "SHA1") return "SHA-1";
-    if (algorithm == "SHA256") return "SHA-256";
-    if (algorithm == "SHA512") return "SHA-512";
-    else return "SHA-1";
-}
-
-function getByOtpauthScheme(link) {
-    try {
-        let args = link.split("?");
-        let path = args[0];
-        let params = args[1];
-
-        let pathParts = path.split("/");
-        let type = pathParts[2]; //hotp or totp
-        let label = decodeURIComponent(pathParts[3]);
-
-        let issuerFromLabel = label.includes(":") ? label.split(":")[0] : null;
-        let client = label.includes(":") ? label.split(":")[1].trim() : label;
-
-        let secret = params.match(/secret=([^&]*)/)?.[1];
-        let issuerFromParams = params.match(/issuer=([^&]*)/)?.[1];
-
-        let issuer = issuerFromParams
-            ? decodeURIComponent(issuerFromParams)
-            : issuerFromLabel;
-        if (!issuer) issuer = client;
-
-        let period = params.match(/period=([^&]*)/)?.[1];
-        let digits = params.match(/digits=([^&]*)/)?.[1];
-        let algorithm = params.match(/algorithm=([^&]*)/)?.[1];
-        let offset = params.match(/offset=([^&]*)/)?.[1] ?? 0;
-
-        if (type.toLowerCase() != "totp")
-            throw new Error("Type is not valid, requires 'TOTP'");
-
-        if (!secret) throw new Error("Secret not defined");
-
-        return new TOTP(
-            secret,
-            issuer,
-            client,
-            Number(digits) || 6,
-            Number(period) || 30,
-            Number(offset),
-            getHashType(algorithm),
-        );
-    } catch (err) {
-        console.log("Failed to parse otpauth scheme:", err);
-        throw new Error(
-            `Invalid otpauth:// link. Please check the link and try again. ERR: ${err}`,
-        );
-    }
 }
 
 function bytesToString(bytes) {
