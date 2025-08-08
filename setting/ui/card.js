@@ -14,6 +14,7 @@ export function createTOTPCard({
     onMoveDown,
     onIssuerChange,
     onClientChange,
+    isEditInProgress
 }) {
     const infoView = View(
         {
@@ -108,6 +109,7 @@ export function createTOTPCard({
                       },
                       onClick: onRename,
                   }),
+                  !isEditInProgress ?
                   Button({
                       label: "Delete",
                       style: {
@@ -116,7 +118,7 @@ export function createTOTPCard({
                           color: colors.text,
                       },
                       onClick: onDelete,
-                  }),
+                  }): null,
               ],
     );
 

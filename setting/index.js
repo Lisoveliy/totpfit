@@ -31,7 +31,7 @@ function GetTOTPList(storage) {
                 editingIndex = index;
                 tempIssuer = element.issuer;
                 tempClient = element.client;
-                updateStorage(storage);
+                _props.settingsStorage.setItem("requestUpdate", Math.random());
             },
             onSave: () => {
                 storage[index].issuer = tempIssuer;
@@ -61,6 +61,7 @@ function GetTOTPList(storage) {
                     updateStorage(storage);
                 }
             },
+            isEditInProgress: editingIndex !== -1,
         });
     });
 }
@@ -119,7 +120,7 @@ AppSettingsPage({
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                margin: "10px",
+                marginBottom: "10px",
                 fontSize: "20px",
                 color: colors.text,
                 borderRadius: "5px",
@@ -151,8 +152,8 @@ AppSettingsPage({
                         style: {
                             display: "flex",
                             justifyContent: "center",
-                            marginTop: "20px",
-                            marginBottom: "20px",
+                            marginTop: "10px",
+                            marginBottom: "10px",
                         },
                     },
                     Link(
