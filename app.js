@@ -7,5 +7,5 @@ App(
         },
         onCreate() {},
         onDestroy() {},
-    })
+    }),
 );

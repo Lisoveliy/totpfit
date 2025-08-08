@@ -2,34 +2,37 @@ import { RenderAddButton } from "./render/totpRenderer";
 import { initLoop } from "./render/index/renderer";
 import { BasePage } from "@zeppos/zml/base-page";
 import { LocalStorage } from "@zos/storage";
+import { setPageBrightTime } from "@zos/display";
 
 const app = getApp();
+
+const brightTimeMs = 300000;
 
 let waitForFetch = true;
 
 Page(
     BasePage({
         onInit() {
+            setPageBrightTime({ brightTime: brightTimeMs });
             this.getTOTPData()
                 .then((x) => {
                     app._options.globalData.TOTPS = JSON.parse(x) ?? [];
-                    
+
                     let localStorage = new LocalStorage();
                     localStorage.setItem(
                         "TOTPs",
-                        JSON.stringify(app._options.globalData.TOTPS)
+                        JSON.stringify(app._options.globalData.TOTPS),
                     );
                     this.initPage();
                 })
                 .catch((x) => {
                     console.log(`Init failed: ${x}`);
-                    try{
+                    try {
                         let localStorage = new LocalStorage();
                         app._options.globalData.TOTPS = JSON.parse(
-                        localStorage.getItem("TOTPs", [])
+                            localStorage.getItem("TOTPs", []),
                         );
-                    }
-                    catch{
+                    } catch {
                         app._options.globalData.TOTPS = [];
                     }
                     this.initPage();
@@ -56,5 +59,5 @@ Page(
                 method: "totps",
             });
         },
-    })
+    }),
 );

@@ -27,5 +27,5 @@ Page(
                 text: "To add TOTP record open\n settings on Zepp app",
             });
         },
-    })
+    }),
 );
