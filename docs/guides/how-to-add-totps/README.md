@@ -41,11 +41,15 @@ To add 2FA TOTP records from Proton Authenticator you must go to settings and pr
 After this save file and open it on text editor:
 
 ![alt text](photo_2025-08-08_17-10-35.jpg)
+
 ![alt text](photo_2025-08-08_17-10-41.jpg)
 
 Copy all stuff from file at clipboard and import in application:
+
 ![alt text](photo_2025-08-08_17-10-38.jpg)
+
 ![alt text](<Снимок экрана_20250808_170854.png>)
 
 Then press OK, records will appear on page:
+
 ![alt text](<Снимок экрана_20250808_170912.png>)
