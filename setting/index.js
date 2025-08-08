@@ -98,11 +98,6 @@ AppSettingsPage({
                 try {
                     errorMessage = "";
                     let link = getTOTPByLink(changes);
-                    if (link == null) {
-                        throw new Error(
-                            "Unsupported link type. Please use an otpauth:// or otpauth-migration:// link",
-                        );
-                    }
 
                     if (Array.isArray(link)) {
                         storage.push(...link);
@@ -121,6 +116,8 @@ AppSettingsPage({
                 alignItems: "center",
                 justifyContent: "center",
                 marginBottom: "10px",
+                marginLeft: "10px",
+                marginRight: "10px",
                 fontSize: "20px",
                 color: colors.text,
                 borderRadius: "5px",
@@ -138,7 +135,7 @@ AppSettingsPage({
                   },
                   errorMessage,
               )
-            : null; //TODO: Check for work
+            : null;
 
         const bottomContainer = View(
             {

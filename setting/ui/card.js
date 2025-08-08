@@ -27,7 +27,7 @@ export function createTOTPCard({
         isEditing
             ? [
                   TextInput({
-                      label: "Rename Issuer",
+                      label: content.renameButtons.renameIssuer,
                       value: tempIssuer,
                       onChange: onIssuerChange,
                       labelStyle: {
@@ -47,7 +47,7 @@ export function createTOTPCard({
                       },
                   }),
                   TextInput({
-                      label: "Rename client",
+                      label: content.renameButtons.renameClient,
                       value: tempClient,
                       onChange: onClientChange,
                       labelStyle: {
@@ -90,7 +90,7 @@ export function createTOTPCard({
         isEditing
             ? [
                   Button({
-                      label: "Save",
+                      label: content.saveButton.label,
                       style: {
                           margin: "5px",
                           backgroundColor: "#28a745",
@@ -101,7 +101,7 @@ export function createTOTPCard({
               ]
             : [
                   Button({
-                      label: "Rename",
+                      label: content.renameButtons.rename,
                       style: {
                           margin: "5px",
                           backgroundColor: colors.notify,
@@ -111,7 +111,7 @@ export function createTOTPCard({
                   }),
                   !isEditInProgress ?
                   Button({
-                      label: "Delete",
+                      label: content.deleteButton.label,
                       style: {
                           margin: "5px",
                           backgroundColor: colors.alert,
@@ -129,7 +129,6 @@ export function createTOTPCard({
                 label: "⬆",
                 disabled: index === 0,
                 style: {
-                    width: "50px",
                     margin: "2px",
                     color: colors.text,
                     backgroundColor: colors.notify,
@@ -140,7 +139,6 @@ export function createTOTPCard({
                 label: "⬇",
                 disabled: index === storage.length - 1,
                 style: {
-                    width: "50px",
                     margin: "2px",
                     color: colors.text,
                     backgroundColor: colors.notify,
