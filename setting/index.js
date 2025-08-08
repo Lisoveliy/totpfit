@@ -1,21 +1,12 @@
 import { getTOTPByLink } from "./utils/queryParser.js";
 import { createTOTPCard } from "./ui/card.js";
+import { colors, content } from "./consts.js";
 
 let _props = null;
 let editingIndex = -1;
 let tempIssuer = "";
 let tempClient = "";
 let errorMessage = "";
-
-const colors = {
-    bg: "#101010",
-    linkBg: "#ffffffc0",
-    secondaryBg: "#282828",
-    text: "#fafafa",
-    alert: "#ad3c23",
-    notify: "#555555",
-    bigText: "#fafafa",
-};
 
 function updateStorage(storage) {
     _props.settingsStorage.setItem("TOTPs", JSON.stringify(storage));
@@ -95,20 +86,20 @@ AppSettingsPage({
                               verticalAlign: "middle",
                           },
                       },
-                      "For add a 2FA TOTP record you must have otpauth:// link or otpauth-migration:// link from Google Authenticator Migration QR-Code",
+                      content.addTotpsHint,
                   )
                 : null;
 
         const createButton = TextInput({
-            placeholder: "otpauth(-migration)://",
-            label: "Add new TOTP record",
+            placeholder: content.createButton.placeHolder,
+            label: content.createButton.label,
             onChange: (changes) => {
                 try {
                     errorMessage = "";
                     let link = getTOTPByLink(changes);
                     if (link == null) {
                         throw new Error(
-                            "Unsupported link type. Please use an otpauth:// or otpauth-migration:// link.",
+                            "Unsupported link type. Please use an otpauth:// or otpauth-migration:// link",
                         );
                     }
 
@@ -132,7 +123,6 @@ AppSettingsPage({
                 fontSize: "20px",
                 color: colors.text,
                 borderRadius: "5px",
-                width: "100%",
                 height: "45px",
             },
         });
@@ -143,7 +133,6 @@ AppSettingsPage({
                       style: {
                           color: colors.alert,
                           textAlign: "center",
-                          margin: "5px",
                       },
                   },
                   errorMessage,
@@ -153,11 +142,29 @@ AppSettingsPage({
         const bottomContainer = View(
             {
                 style: {
-                    padding: "5px 0px",
                     backgroundColor: colors.bg,
                 },
             },
-            [errorText, createButton].filter(Boolean),
+            [
+                View(
+                    {
+                        style: {
+                            display: "flex",
+                            justifyContent: "center",
+                            marginTop: "20px",
+                            marginBottom: "20px",
+                        },
+                    },
+                    Link(
+                        {
+                            source: content.instructionLink.source,
+                        },
+                        content.instructionLink.label,
+                    ),
+                ),
+                errorText,
+                createButton,
+            ].filter(Boolean),
         );
 
         const pageContainer = View(
@@ -185,6 +192,7 @@ AppSettingsPage({
                                       align: "center",
                                       paragraph: true,
                                       style: {
+                                          marginTop: "10px",
                                           marginBottom: "10px",
                                           color: colors.bigText,
                                           fontSize: 23,
@@ -192,7 +200,7 @@ AppSettingsPage({
                                           verticalAlign: "middle",
                                       },
                                   },
-                                  "TOTP records:",
+                                  content.totpRecordsHint,
                               ),
                     ],
                 ),
@@ -200,29 +208,13 @@ AppSettingsPage({
                 View(
                     {
                         style: {
-                            flexGrow: 1,
-                            overflow: "scroll",
+                            height: "100%",
+                            overflowX: "hidden",
+                            overflowY: "auto",
+                            backgroundColor: colors.bg,
                         },
                     },
-                    [
-                        ...totpEntrys,
-                        View(
-                            {
-                                style: {
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    marginTop: "20px",
-                                    marginBottom: "20px",
-                                },
-                            },
-                            Link(
-                                {
-                                    source: "https://github.com/Lisoveliy/totpfit/blob/main/docs/guides/how-to-add-totps/README.md",
-                                },
-                                "Instruction | Report issue (GitHub)",
-                            ),
-                        ),
-                    ],
+                    [...totpEntrys],
                 ),
 
                 bottomContainer,

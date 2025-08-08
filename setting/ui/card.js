@@ -1,3 +1,5 @@
+import { colors, content } from "../consts";
+
 export function createTOTPCard({
     element,
     index,
@@ -13,13 +15,6 @@ export function createTOTPCard({
     onIssuerChange,
     onClientChange,
 }) {
-    const colors = {
-        secondaryBg: "#282828",
-        text: "#fafafa",
-        alert: "#ad3c23",
-        notify: "#555555",
-    };
-
     const infoView = View(
         {
             style: {
@@ -31,23 +26,59 @@ export function createTOTPCard({
         isEditing
             ? [
                   TextInput({
-                      label: "Issuer",
+                      label: "Rename Issuer",
                       value: tempIssuer,
                       onChange: onIssuerChange,
+                      labelStyle: {
+                          backgroundColor: colors.notify,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          margin: "10px",
+                          fontSize: "20px",
+                          color: colors.text,
+                          borderRadius: "5px",
+                          height: "40px",
+                          width: "200px"
+                      },
+                      subStyle: {
+                          display: "none",
+                      },
                   }),
                   TextInput({
-                      label: "Client",
+                      label: "Rename client",
                       value: tempClient,
                       onChange: onClientChange,
+                      labelStyle: {
+                          backgroundColor: colors.notify,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          margin: "10px",
+                          fontSize: "20px",
+                          color: colors.text,
+                          borderRadius: "5px",
+                          height: "40px",
+                          width: "200px"
+                      },
+                      subStyle: {
+                          display: "none",
+                      },
                   }),
               ]
             : [
                   Text(
-                      { style: { color: colors.text, marginBottom: "2px" } },
+                      {
+                          style: {
+                              color: colors.text,
+                              marginBottom: "2px",
+                              fontWeight: "600",
+                          },
+                      },
                       `Issuer: ${element.issuer}`,
                   ),
                   Text(
-                      { style: { color: colors.text } },
+                      { style: { color: colors.text, fontWeight: "600" } },
                       `Client: ${element.client}`,
                   ),
               ],
@@ -93,15 +124,25 @@ export function createTOTPCard({
         { style: { display: "flex", flexDirection: "column" } },
         [
             Button({
-                label: "↑",
+                label: "⬆",
                 disabled: index === 0,
-                style: { width: "50px", margin: "2px" },
+                style: {
+                    width: "50px",
+                    margin: "2px",
+                    color: colors.text,
+                    backgroundColor: colors.notify,
+                },
                 onClick: onMoveUp,
             }),
             Button({
-                label: "↓",
+                label: "⬇",
                 disabled: index === storage.length - 1,
-                style: { width: "50px", margin: "2px" },
+                style: {
+                    width: "50px",
+                    margin: "2px",
+                    color: colors.text,
+                    backgroundColor: colors.notify,
+                },
                 onClick: onMoveDown,
             }),
         ],
@@ -117,7 +158,12 @@ export function createTOTPCard({
                     marginTop: "5px",
                 },
             },
-            `${element.hashType} | ${element.digits} digits | ${element.fetchTime} seconds | ${element.timeOffset} sec offset`,
+            content.totpDescText.eval(
+                element.hashType,
+                element.digits,
+                element.fetchTime,
+                element.timeOffset,
+            ),
         ),
         buttonsView,
     ]);
