@@ -17,6 +17,6 @@
 
 #### This repo has mirror for public issues on [GitHub](https://github.com/Lisoveliy/totpfit)
 
-#### To contribute on this repo you must use my [Gitea](https://git.lisoveliy.su/Lisoveliy/totpfit)
+#### To contribute on this repo you must use my [Gitea](https://git.lisdev.org/Lisoveliy/totpfit)
 
 Don't be shy to contact me for access!
